@@ -10,19 +10,20 @@ namespace eda {
 
 namespace index {
 
-class Index : public b_tree::BTree<Persona, Index> {
+template <int m>
+class RamIndex : public b_tree::BaseBTree<Persona, m, RamIndex<m> > {
 private:
-	std::list<RamRecord> records_;
+	std::list<RamRecord<m> > records_;
 	char data_filename_[100];
 
 public:
-	Index(std::string data_filename) {
+	RamIndex(std::string data_filename) {
 		strcpy(this->data_filename_, data_filename.c_str());
 	} 
 	void Execute() {
 		std::ifstream file(this->data_filename_, std::ios::binary);
 
-		Record record;
+		RamRecord<m> record;
 
 		while (file.peek() != EOF) {
 			record.pdir = file.tellg();
@@ -41,16 +42,16 @@ public:
 		std::ofstream file(this->data_filename_, std::ios::binary);
 
 		for (auto record : this->records_) {
-			file.write((char *) &record, sizeof(Record));
+			file.write((char *) &record, sizeof(RamRecord<m>));
 		}
 	}
 	void Read() {
 		std::ifstream file(this->data_filename_, std::ios::binary); 
 
-		Record record;
+		RamRecord<m> record;
 
 		while (file.peek() != EOF) {
-			file.read((char *) &record, sizeof(Record));
+			file.read((char *) &record, sizeof(RamRecord<m>));
 
 			this->records_.push_back(record);
 		}

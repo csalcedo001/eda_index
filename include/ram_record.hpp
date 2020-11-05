@@ -8,7 +8,8 @@ namespace eda {
 
 namespace index {
 
-class RamRecord : public b_tree::BaseNode<Persona, RamRecord> {
+template <int m>
+class RamRecord : public b_tree::BaseNode<Persona, m, RamRecord<m> > {
     char key[10];
     long pdir;
     long offset;  
