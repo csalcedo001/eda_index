@@ -1,16 +1,16 @@
 #include <iostream>
 #include <fstream>
 
-#include "functions.hpp"
+#include "persona.hpp"
 
 using namespace std;
 
 int main()
 {
   fstream file("data/data.dat", ios::binary | fstream::out);
-  std::index::Persona P("0001","Cesar Madera"," Su casa");
-  std::index::Persona Q("0002","Ariana Villegas"," otro lado");
-  std::index::Persona R("0003","Fabrazio Garcia"," Por ahi");
+  eda::index::Persona P("0001","Cesar Madera"," Su casa");
+  eda::index::Persona Q("0002","Ariana Villegas"," otro lado");
+  eda::index::Persona R("0003","Fabrazio Garcia"," Por ahi");
 
   P.Write(file);
   Q.Write(file);
