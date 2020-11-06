@@ -20,7 +20,7 @@ public:
 	RamIndex(std::string data_filename) {
 		strcpy(this->data_filename_, data_filename.c_str());
 	} 
-	void Execute() {
+	void execute() {
 		std::ifstream file(this->data_filename_, std::ios::binary);
 
 		RamRecord<m> record;
@@ -37,7 +37,7 @@ public:
 	}
 
 	// Guarda en Disco el archico index.dat 
-	void Write() {
+	void write() {
 		std::string index_filename;
 		std::ofstream file(this->data_filename_, std::ios::binary);
 
@@ -45,7 +45,7 @@ public:
 			file.write((char *) &record, sizeof(RamRecord<m>));
 		}
 	}
-	void Read() {
+	void read() {
 		std::ifstream file(this->data_filename_, std::ios::binary); 
 
 		RamRecord<m> record;
@@ -59,7 +59,7 @@ public:
 
 	// Debe buscar la clava en la lista
 	// mostrar la información de esa persona en el archivo de Personas. 
-	// void Find(char * key) {
+	// void find(char * key) {
 	// 	for (auto record : this->records_) {
 	// 		if 
 	// }
