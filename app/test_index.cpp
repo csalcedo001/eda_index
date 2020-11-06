@@ -3,7 +3,7 @@
 #include "ram_index.hpp"
 
 int main() {
-	eda::index::RamIndex index;
+	eda::index::RamIndex;
 
 	return 0;
 }
