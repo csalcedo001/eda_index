@@ -2,43 +2,42 @@
 #define BTREE_CON_PAGINACION_CLION_BTREE_H
 
 #include <vector>
+
 #include "Record.h"
-using namespace std;
 
 template <typename T, int ORDER>
 class BTree {
-
 private:
-
     enum state_t { OF, UF, B_OK };
 
     struct Page {
-
         long posOfIndex = -1;
-        pair <T, long> indexdata[ORDER+1];
+        std::pair <T, long> indexdata[ORDER+1];
         long children[ORDER+2];
         size_t count{0};
 
         Page() {
-            fill(children, children + ORDER + 2, -1);
+            std::fill(children, children + ORDER + 2, -1);
         }
 
-        void insert_into(size_t index, pair<T, long> value, fstream& file) {
+        void insert_into(size_t index, std::pair<T, long> value, std::fstream& file) {
             size_t j = this->count;
+
             while (j > index) {
                 children[j+1] = children[j];
                 indexdata[j] = indexdata[j-1];
                 j--;
             }
+
             children[j+1] = children[j];
             indexdata[j] = value;
             this->count++;
-            file.seekg(this->posOfIndex, ios::beg);
+            file.seekg(this->posOfIndex, std::ios::beg);
             Page pos = *this;
             file.write((char*) &pos, sizeof(Page));
         }
 
-        state_t insert(pair<T, long> value, fstream& file) {
+        state_t insert(std::pair<T, long> value, std::fstream& file) {
             size_t index = 0;
             while (this->indexdata[index].first < value.first && index < this->count) {
                 index++;
@@ -47,7 +46,7 @@ private:
                 this->insert_into(index, value, file);
             }
             else {
-                file.seekg(this->children[index], ios::beg);
+                file.seekg(this->children[index], std::ios::beg);
                 Page nextnode;
                 file.read((char*) &nextnode, sizeof(Page));
                 auto state = nextnode.insert(value, file);
@@ -58,9 +57,9 @@ private:
             return this->count > ORDER ? OF : B_OK;
         }
 
-        void split(size_t position, fstream& file) {
+        void split(size_t position, std::fstream& file) {
             Page tosplitNode;
-            file.seekg(this->children[position], ios::beg);
+            file.seekg(this->children[position], std::ios::beg);
             file.read((char*) &tosplitNode, sizeof(Page));
 
             Page child1;
@@ -84,23 +83,23 @@ private:
             child2.children[j] = tosplitNode.children[i];
 
             this->insert_into(position, tosplitNode.indexdata[mid], file);
-            file.seekg(0, ios::end);
+            file.seekg(0, std::ios::end);
             long poschild1 = file.tellg();
             child1.posOfIndex = poschild1;
             file.write((char*) &child1, sizeof(Page));
 
-            file.seekg(tosplitNode.posOfIndex, ios::beg);
+            file.seekg(tosplitNode.posOfIndex, std::ios::beg);
             long poschild2 = tosplitNode.posOfIndex;
             child2.posOfIndex = poschild2;
             file.write((char*) &child2, sizeof(Page));
 
             this->children[position] = poschild1;
             this->children[position + 1] = poschild2;
-            file.seekg(this->posOfIndex, ios::beg);
+            file.seekg(this->posOfIndex, std::ios::beg);
             file.write((char*) this, sizeof(Page));
         }
 
-        long search(T key, fstream& file) {
+        long search(T key, std::fstream& file) {
             if (this->count == 0) { return -1; }
             size_t index = 0;
             while (this->indexdata[index].first < key  && index < this->count) {
@@ -109,7 +108,7 @@ private:
             if (this->indexdata[index].first == key) {
                 return this->indexdata[index].second;
             } else {
-                file.seekg(this->children[index], ios::beg);
+                file.seekg(this->children[index], std::ios::beg);
                 Page nextnode;
                 file.read((char*) &nextnode, sizeof(Page));
                 return nextnode.search(key, file);
@@ -125,23 +124,23 @@ public:
     BTree() {}
 
     void insert(T key, long datapos) {
-        fstream file("data/index/index.dat", ios::in | ios::out | ios::binary);
+        std::fstream file("data/index/index.dat", std::ios::in | std::ios::out | std::ios::binary);
         if(!file.is_open()){
-            cout << "Could not open file" << endl;
+            std::cout << "Could not open file" << std::endl;
         }
-        file.seekg(0, ios::end);
+        file.seekg(0, std::ios::end);
         if (file.tellg() == 0) {
             Page newroot;
-            pair<T, long> value = make_pair(key, datapos);
+            std::pair<T, long> value = std::make_pair(key, datapos);
             long pos = 0;
             newroot.posOfIndex = pos;
             newroot.insert(value, file);
         }
         else {
-            file.seekg(rootPos, ios::beg);
+            file.seekg(rootPos, std::ios::beg);
             Page root;
             file.read((char*) &root, sizeof(Page));
-            pair<T, long> value = make_pair(key, datapos);
+            std::pair<T, long> value = std::make_pair(key, datapos);
             auto state = root.insert(value, file);
             if (state == state_t::OF) {
                 split_root(file);
@@ -151,8 +150,8 @@ public:
         file.clear();
     }
 
-    void split_root(fstream& file) {
-        file.seekg(rootPos, ios::beg);
+    void split_root(std::fstream& file) {
+        file.seekg(rootPos, std::ios::beg);
         Page root;
         file.read((char*) &root, sizeof(Page));
 
@@ -177,7 +176,7 @@ public:
         child2.children[j] = root.children[i];
 
         root.indexdata[0] = root.indexdata[mid];
-        file.seekg(0, ios::end);
+        file.seekg(0, std::ios::end);
         long poschild1 = file.tellg();
         child1.posOfIndex = poschild1;
         file.write((char*) &child1, sizeof(Page));
@@ -190,23 +189,23 @@ public:
         root.children[1] = poschild2;
         root.count = 1;
 
-        file.seekg(rootPos, ios::beg);
+        file.seekg(rootPos, std::ios::beg);
         file.write((char*) &root, sizeof(Page));
     }
 
     Record search(T key) {
-        fstream file("data/index/index.dat", ios::in | ios::out | ios::binary);
+        std::fstream file("data/index/index.dat", std::ios::in | std::ios::out | std::ios::binary);
         if(!file.is_open()){
-            cout << "Could not open file" << endl;
+            std::cout << "Could not open file" << std::endl;
         }
-        file.seekg(rootPos, ios::beg);
+        file.seekg(rootPos, std::ios::beg);
         Page root;
         file.read((char*) &root, sizeof(Page));
 
         long pos = root.search(key, file);
         file.close();
         file.clear();
-        if (pos == -1) {cout << "Not found" << endl; return Record(); }
+        if (pos == -1) {std::cout << "Not found" << std::endl; return Record(); }
         else { return Record(pos); }
     }
 

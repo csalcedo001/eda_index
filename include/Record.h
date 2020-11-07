@@ -6,24 +6,20 @@
 #include <sstream>
 #include <string>
 #include <cstring>
-using namespace std;
 
 struct Record {
-
-    string word;
-    string definition;
+    std::string word;
+    std::string definition;
 
     Record() = default;
-
-    Record(string word, string definition) : word{word}, definition{definition} {}
-
+    Record(std::string word, std::string definition) : word{word}, definition{definition} {}
     Record(long pos) {
-        fstream file("data.dat");
+        std::fstream file("data.dat");
         file.seekg(pos);
-        string line;
+        std::string line;
         getline(file, line);
-        stringstream ss(line);
-        string token;
+        std::stringstream ss(line);
+        std::string token;
         getline(ss, token, '|');
         word = token;
         getline(ss, token, '|');
