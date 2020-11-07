@@ -125,7 +125,7 @@ public:
     BTree() {}
 
     void insert(T key, long datapos) {
-        fstream file("index.dat", ios::in | ios::out | ios::binary);
+        fstream file("data/index/index.dat", ios::in | ios::out | ios::binary);
         if(!file.is_open()){
             cout << "Could not open file" << endl;
         }
@@ -195,7 +195,7 @@ public:
     }
 
     Record search(T key) {
-        fstream file("index.dat", ios::in | ios::out | ios::binary);
+        fstream file("data/index/index.dat", ios::in | ios::out | ios::binary);
         if(!file.is_open()){
             cout << "Could not open file" << endl;
         }

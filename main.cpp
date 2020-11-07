@@ -1,12 +1,15 @@
+#include <iostream>
+
 #include "BTree.h"
+
 using namespace std;
 
 template <int T>
 struct CharArray {
-
     CharArray() = default;
     CharArray(const string& temp) { strcpy(data, temp.c_str()); }
     CharArray(char in[T]) { memcpy(data, in, T); }
+
     char& operator[](unsigned int idx) { return data[idx]; }
     char data[T];
 
@@ -20,7 +23,6 @@ struct CharArray {
         string rhd(idx.data);
         return lhd == rhd;
     }
-
 };
 
 int main() {
@@ -28,7 +30,7 @@ int main() {
     BTree<CharArray<45>, 3> bt;
 
     //------------ READ ---------------
-    fstream file("data.dat");
+    fstream file("data/data/data.dat");
     string line;
     long pos = 0;
     while (getline(file, line)) {
