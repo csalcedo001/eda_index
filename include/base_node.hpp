@@ -10,8 +10,8 @@ namespace b_tree {
 template <typename T, int m, typename Node>
 class BaseNode {
 public:
-	std::array<T, m> values_;
-	std::array<Node *, m + 1> children_;
+	T values_[m];
+	Node *children_[m + 1];
 	int capacity_;
 
 public:
