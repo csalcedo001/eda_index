@@ -7,10 +7,10 @@ namespace eda {
 
 namespace b_tree {
 
-template <typename T, int m, typename Node>
+template <typename K, int m, typename Node>
 class BaseNode {
 public:
-	T values_[m];
+	K values_[m];
 	Node *children_[m + 1];
 	int capacity_;
 

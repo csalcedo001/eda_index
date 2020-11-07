@@ -7,7 +7,7 @@ namespace eda {
 
 namespace b_tree {
 
-template <typename T, int m, typename Node>
+template <typename K, int m, typename Node>
 class BaseBTree {
 public:
 	enum State {
@@ -23,17 +23,17 @@ public:
 	BaseBTree();
 	~BaseBTree();
 
-	void insert(T);
-	bool exists(T);
-	void remove(T);
+	void insert(K);
+	bool exists(K);
+	void remove(K);
 	int size();
 	void print();
 
 protected:
-	State insert(Node *, T);
+	State insert(Node *, K);
 	Node *divide(Node *&);
-	void insert_within(Node *, int, T, Node *);
-	int child_key(Node *, T);
+	void insert_within(Node *, int, K, Node *);
+	int child_key(Node *, K);
 	void print(Node *, int level);
 	void kill(Node *);
 };
