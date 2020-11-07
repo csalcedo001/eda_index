@@ -1,2 +1,2 @@
 # eda_index
-Indexation
+Indexing
