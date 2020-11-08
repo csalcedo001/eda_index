@@ -62,7 +62,7 @@ int main() {
 		total_time += chrono::duration_cast<chrono::microseconds>(end - begin).count();
 	}
 
-	cout << disk_calls << ' ' << total_time << endl;
+	cout << n << ' ' << disk_calls << ' ' << total_time << endl;
 
     return 0;
 }
