@@ -20,7 +20,7 @@ int main() {
 		return 1;
 	}
 
-    BTree<CharArray<45>, 45> bt;
+    BTree<CharArray<45>, 3> bt;
 
     string line;
 
@@ -46,23 +46,18 @@ int main() {
 	string query;
 
 	auto begin = chrono::steady_clock::now();
-	auto end = begin;
-
-	double total_time = 0;
 
 	for (int i = 0; i < n; i++) {
 		cin >> query;
 
     	CharArray<45> temp(query);
 
-		begin = chrono::steady_clock::now();
     	Record found = bt.search(temp);
-		end = chrono::steady_clock::now();
-
-		total_time += chrono::duration_cast<chrono::microseconds>(end - begin).count();
 	}
 
-	cout << n << ' ' << disk_calls << ' ' << total_time << endl;
+	auto end = chrono::steady_clock::now();
+
+	cout << n << ' ' << disk_calls << ' ' << chrono::duration_cast<chrono::microseconds>(end - begin).count() << endl;
 
     return 0;
 }

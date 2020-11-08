@@ -225,7 +225,7 @@ public:
         file.close();
 
         if (pos == -1) {
-			std::cout << "Not found" << std::endl;
+			// std::cout << "Not found" << std::endl;
 			return Record();
 		}
 
