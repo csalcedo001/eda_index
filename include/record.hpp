@@ -19,7 +19,7 @@ struct Record {
 	{ }
 
     Record(long pos) {
-        std::fstream file("data/data/data.dat");
+        std::fstream file(data_path);
         std::string line;
 
         file.seekg(pos);

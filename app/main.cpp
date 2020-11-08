@@ -6,11 +6,21 @@
 using namespace std;
 
 int main() {
+	string dictionary;
 
-    BTree<CharArray<45>, 3> bt;
+	cin >> dictionary;
+
+	b_tree_setup(dictionary);
 
     //------------ READ ---------------
-    fstream file("data/data/data.dat");
+    fstream file(data_path);
+
+	if (!file.is_open()) {
+		cerr << "No dictionary " << dictionary << endl;
+		return 1;
+	}
+
+    BTree<CharArray<45>, 3> bt;
 
     string line;
 
@@ -37,6 +47,7 @@ int main() {
     Record found = bt.search(temp);
 
     cout << found.word << " : " << found.definition << endl;
+	cout << disk_calls << endl;
 
     return 0;
 }

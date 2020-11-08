@@ -3,7 +3,17 @@
 
 #include <vector>
 
+std::string index_path;
+std::string data_path;
+
 #include "record.hpp"
+
+int disk_calls = 0;
+
+void b_tree_setup(std::string dictionary) {
+	index_path = "data/index/" + dictionary + ".dat";
+	data_path = "data/data/" + dictionary + ".dat";
+}
 
 template <typename T, int ORDER>
 class BTree {
@@ -113,6 +123,7 @@ private:
                 file.seekg(this->children[index], std::ios::beg);
                 Page nextnode;
                 file.read((char*) &nextnode, sizeof(Page));
+				disk_calls++;
                 return nextnode.search(key, file);
             }
         }
@@ -123,10 +134,14 @@ public:
     BTree() {}
 
     void insert(T key, long datapos) {
-        std::fstream file("data/index/index.dat", std::ios::in | std::ios::out | std::ios::binary);
+        std::fstream file(index_path, std::ios::in | std::ios::out | std::ios::binary);
+
         if(!file.is_open()){
-            std::cout << "Could not open file" << std::endl;
+            std::cout << "Could not open file at " << index_path << std::endl;
+
+			return;
         }
+
         file.seekg(0, std::ios::end);
         if (file.tellg() == 0) {
             Page newroot;
@@ -192,10 +207,10 @@ public:
     }
 
     Record search(T key) {
-        std::fstream file("data/index/index.dat", std::ios::in | std::ios::out | std::ios::binary);
+        std::fstream file(index_path, std::ios::in | std::ios::out | std::ios::binary);
 
         if (!file.is_open()){
-            std::cout << "Could not open file" << std::endl;
+            std::cout << "Could not open file at " << index_path << std::endl;
 
 			return Record();
         }
@@ -203,6 +218,7 @@ public:
         file.seekg(rootPos, std::ios::beg);
         Page root;
         file.read((char*) &root, sizeof(Page));
+		disk_calls++;
 
         long pos = root.search(key, file);
 
