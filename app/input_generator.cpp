@@ -11,7 +11,7 @@ int main() {
 
 	cin >> dictionary;
 
-	string dict_path = "data/data/" + dictionary + ".txt";
+	string dict_path = "data/data/" + dictionary + ".dat";
 
 	ifstream file(dict_path, ios::binary | ios::in);
 
@@ -39,6 +39,8 @@ int main() {
 
 	std::default_random_engine generator(seed);
 	std::uniform_int_distribution<int> point_distribution(0, queries.size() - 1);
+
+	cout << dictionary << ' ' << n << endl;
 
 	for (int i = 0; i < n; i++) {
 		int index = point_distribution(generator);
