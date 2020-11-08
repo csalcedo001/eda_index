@@ -1,5 +1,5 @@
-#ifndef BTREE_CON_PAGINACION_CLION_RECORD_H
-#define BTREE_CON_PAGINACION_CLION_RECORD_H
+#ifndef INDEX_RECORD_HPP_
+#define INDEX_RECORD_HPP_
 
 #include <iostream>
 #include <fstream>
@@ -12,20 +12,27 @@ struct Record {
     std::string definition;
 
     Record() = default;
-    Record(std::string word, std::string definition) : word{word}, definition{definition} {}
+
+    Record(std::string word, std::string definition) :
+		word{word},
+		definition{definition}
+	{ }
+
     Record(long pos) {
-        std::fstream file("data.dat");
-        file.seekg(pos);
+        std::fstream file("data/data/data.dat");
         std::string line;
+
+        file.seekg(pos);
         getline(file, line);
+
         std::stringstream ss(line);
         std::string token;
-        getline(ss, token, '|');
+
+        getline(ss, token, '\t');
         word = token;
-        getline(ss, token, '|');
+        getline(ss, token, '\t');
         definition = token;
     }
-
 };
 
-#endif //BTREE_CON_PAGINACION_CLION_RECORD_H
+#endif // INDEX_RECORD_HPP_

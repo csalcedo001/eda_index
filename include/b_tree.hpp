@@ -1,13 +1,15 @@
-#ifndef BTREE_CON_PAGINACION_CLION_BTREE_H
-#define BTREE_CON_PAGINACION_CLION_BTREE_H
+#ifndef INDEX_B_TREE_HPP_
+#define INDEX_B_TREE_HPP_
 
 #include <vector>
 
-#include "Record.h"
+#include "record.hpp"
 
 template <typename T, int ORDER>
 class BTree {
 private:
+    long rootPos = 0;
+
     enum state_t { OF, UF, B_OK };
 
     struct Page {
@@ -117,10 +119,7 @@ private:
 
     };
 
-    long rootPos = 0;
-
 public:
-
     BTree() {}
 
     void insert(T key, long datapos) {
@@ -147,7 +146,6 @@ public:
             }
         }
         file.close();
-        file.clear();
     }
 
     void split_root(std::fstream& file) {
@@ -195,20 +193,29 @@ public:
 
     Record search(T key) {
         std::fstream file("data/index/index.dat", std::ios::in | std::ios::out | std::ios::binary);
-        if(!file.is_open()){
+
+        if (!file.is_open()){
             std::cout << "Could not open file" << std::endl;
+
+			return Record();
         }
+
         file.seekg(rootPos, std::ios::beg);
         Page root;
         file.read((char*) &root, sizeof(Page));
 
         long pos = root.search(key, file);
+
         file.close();
-        file.clear();
-        if (pos == -1) {std::cout << "Not found" << std::endl; return Record(); }
-        else { return Record(pos); }
+
+        if (pos == -1) {
+			std::cout << "Not found" << std::endl;
+			return Record();
+		}
+
+		return Record(pos);
     }
 
 };
 
-#endif //BTREE_CON_PAGINACION_CLION_BTREE_H
+#endif // INDEX_B_TREE_HPP_
